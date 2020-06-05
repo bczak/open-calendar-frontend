@@ -1,4 +1,4 @@
-# frontend
+# open-calendar
 
 ## Project setup
 ```

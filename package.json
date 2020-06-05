@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "open-calendar",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,24 +7,32 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@types/md5": "^2.2.0",
+    "@types/socket.io": "^2.1.8",
+    "babel": "^6.23.0",
     "core-js": "^3.6.5",
+    "moment": "^2.26.0",
+    "moment-timezone": "^0.5.31",
+    "socket.io": "^2.3.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.2.0",
-    "vuetify": "^2.2.11"
+    "vue-i18n": "^8.18.1",
+    "vue-moment": "^4.1.0",
+    "vue-router": "^3.3.2",
+    "vuetify": "^2.2.32",
+    "ws": "^7.3.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.4.0",
-    "@vue/cli-plugin-router": "~4.4.0",
-    "@vue/cli-service": "~4.4.0",
-    "sass": "^1.19.0",
-    "sass-loader": "^8.0.0",
-    "vue-cli-plugin-vuetify": "~2.0.5",
-    "vue-template-compiler": "^2.6.11",
-    "vuetify-loader": "^1.3.0"
+    "@vue/cli-plugin-babel": "latest",
+    "@vue/cli-plugin-router": "latest",
+    "@vue/cli-service": "latest",
+    "sass": "latest",
+    "sass-loader": "latest",
+    "vue-cli-plugin-vuetify": "latest",
+    "vue-template-compiler": "latest",
+    "vuetify-loader": "latest"
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions",
-    "not dead"
+    "last 2 versions"
   ]
 }
