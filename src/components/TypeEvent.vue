@@ -136,7 +136,7 @@
 					></v-textarea>
 				</div>
 				<v-btn text disabled>Color</v-btn>
-				<v-color-picker v-model="event.color" class="ma-auto" hide-canvas></v-color-picker>
+				<v-color-picker v-model="event.color" class="ma-auto" width="100%" hide-canvas></v-color-picker>
 				
 				<v-card-actions>
 					

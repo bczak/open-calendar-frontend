@@ -61,7 +61,8 @@
 			dark: Boolean
 		},
 		async mounted() {
-			const app = window.location.pathname.split(':')[1]
+      const app = window.location.pathname.split(':')[1]
+      if(app == undefined) return;
 			this.calendar = await (await fetch(API + '/api/calendar/' + app)).json()
 			this.calendar_type = this.calendar.type ? 'Public': 'Private'
 		},

@@ -42,7 +42,7 @@
 						{{calendar.title}}
 					</v-list-item-title>
 					<v-list-item-subtitle>
-						{{user.mail}}
+						{{user.gogole_mail || user.mail}}
 					</v-list-item-subtitle>
 				</v-list-item-content>
 			</v-list-item>
@@ -156,12 +156,14 @@
 		components: {NewDialog, NewEvent, Settings},
 		data: () => (data),
 		async mounted() {
-			let user = await (await fetch(API + '/api/user')).json()
+      let user = await (await fetch(API + '/api/user')).json()
+      let mail = user.user.gogole_mail || user.user.mail
 			if (user.user.mail !== 'anonymous') data.user = {...user.user, signed: true}
 			const app = window.location.pathname.split(':')[1]
 			if (app) {
 				this.dialog = false;
-				this.calendar = {_id: app}
+        this.calendar = {_id: app}
+        if(app == undefined) return
 				this.calendar = await (await fetch(API + '/api/calendar/' + app)).json()
 				if (this.calendar.error) window.location = API + '/app'
 				this.events = []
