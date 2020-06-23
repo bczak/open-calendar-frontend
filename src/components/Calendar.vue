@@ -1,5 +1,5 @@
 <template>
-	<v-calendar type="month" :start="date" :dark="dark" :weekdays="weekdays" @click:date="toDate" :events="events" :event-color="getColor"/>
+	<v-calendar type="month" :start="date" :dark="dark" :weekdays="weekdays" @click:date="toDate" @click:event="openEvent" :events="events" :event-color="getColor"/>
 </template>
 
 <script>
@@ -15,6 +15,9 @@
 		methods: {
 			getColor(event) {
 				return event.color
+			},
+			openEvent(e) {
+				this.$emit('openEvent', e.event.key)
 			},
 			
 			toDate: function (date) {

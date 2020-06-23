@@ -3,7 +3,8 @@
 		<v-alert type="error" v-if="error.length > 0">
 			{{error}}
 		</v-alert>
-		<v-btn text disabled>Create New Event</v-btn>
+		<v-btn text disabled v-if="type === 'new'">Create New Event</v-btn>
+		<v-btn text disabled v-if="type === 'edit'">Edit Event</v-btn>
 		<v-row>
 			<v-col>
 				
@@ -157,6 +158,8 @@
 		name: "TypeEvent",
 		props: {
 			cal: String,
+			type: String,
+			eventOld: Object
 		},
 		data: () => ({
 			text_rule: [
@@ -178,38 +181,79 @@
 				notes: ''
 			}
 		}),
+		mounted() {
+			if (this.eventOld.color !== undefined) this.event.color = this.eventOld.color;
+			if (this.eventOld.title !== undefined) this.event.title = this.eventOld.title;
+			if (this.eventOld.startDate !== undefined) this.event.startDate = this.eventOld.startDate;
+			if (this.eventOld.endDate !== undefined) this.event.endDate = this.eventOld.endDate;
+			if (this.eventOld.startTime !== undefined) this.event.startTime = this.eventOld.startTime;
+			if (this.eventOld.endTime !== undefined) this.event.endTime = this.eventOld.endTime;
+			if (this.eventOld.location !== undefined) this.event.location = this.eventOld.location;
+			if (this.eventOld.notes !== undefined) this.event.notes = this.eventOld.notes;
+		},
 		methods: {
 			save: async function () {
+				if (this.type === 'edit') {
+					let event = {
+						color: this.event.color,
+						title: this.event.title,
+						location: this.event.location,
+						notes: [this.event.notes],
+						start: this.event.startDate + 'T' + this.event.startTime + ':00.000Z',
+						end: this.event.endDate + 'T' + this.event.endTime + ':00.000Z',
+					}
+					const app = window.location.pathname.split(':')[1]
+					let res = await fetch(API + '/api/event/' + app + '' + this.eventOld._id,
+						{
+							method: 'PUT', mode: 'cors',
+							headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(event)
+						})
+					res = await res.json();
+					console.log(res)
+					if(res.error) {
+						this.error = res.error || '';
+					} else {
+						this.$emit('close')
+					}
+					return;
+				}
 				let event = {
 					color: this.event.color,
 					title: this.event.title,
 					location: this.event.location,
 					notes: [this.event.notes],
-					startDate: this.event.startDate + 'T' + this.event.startTime + ':00.000Z',
-					endDate: this.event.endDate + 'T' + this.event.endTime + ':00.000Z',
+					start: this.event.startDate + 'T' + this.event.startTime + ':00.000Z',
+					end: this.event.endDate + 'T' + this.event.endTime + ':00.000Z',
 				}
-				if (new Date(event.endDate) < new Date(event.startDate)) {
+				if (new Date(event.end) < new Date(event.start)) {
 					this.error = 'Start Date cannot be later than End Date'
 					return;
 				}
-				let res;
-				try {
-					res = await fetch(API + '/api/event/' + this.cal, {
+				console.log(event)
+				
+				fetch(API + '/api/event/' + this.cal, {
 						method: 'POST',
+						mode: 'cors',
 						headers: {
 							'Accept': 'application/json',
 							'Content-Type': 'application/json'
 						},
 						body: JSON.stringify(event)
-					})
-				} catch (e) {
-					console.log(e)
-				}
-				res = await res.json();
-				if(res.error) {
-					this.error = res.error;
-					return;
-				}
+					}).then(response => {
+						if(!response.ok) {
+							return response.json();
+						}
+						return response.json();
+				}).then((res) => {
+					if (res.error) {
+						this.error = res.error;
+					}
+				})
+				
 				this.$emit('update')
 				this.$emit('close')
 

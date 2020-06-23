@@ -1,4 +1,4 @@
-<template>
+	<template>
 	<v-dialog v-model="active" max-width="500" @click:outside="close">
 		<v-tabs
 			v-model="tab"
@@ -12,7 +12,7 @@
 				{{$t('app.event')}}
 			</v-tab>
 			<v-tab-item>
-				<TypeEvent :cal="cal" v-on:update="update()" v-on:close="close"/>
+				<TypeEvent :cal="cal" v-on:update="update()" v-on:close="close" :type="event._id === undefined ? 'new' : 'edit'" :eventOld="event"/>
 			</v-tab-item>
 <!--			<v-tab>-->
 <!--				{{$t('app.reminder')}}-->
@@ -34,7 +34,8 @@
 		props: {
 			cal: String,
 			dark: Boolean,
-			active: Boolean
+			active: Boolean,
+			event: Object
 		},
 		data: () => ({
 			tab: null,
@@ -42,11 +43,11 @@
 		}),
 		methods: {
 			close: function () {
+				this.$emit('update')
 				this.$emit('close')
 			},
 			update: function () {
-				console.log('update d')
-				this.$emit('update')
+				return this.$emit('update')
 			}
 		}
 	}
